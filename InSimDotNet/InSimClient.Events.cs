@@ -9,6 +9,11 @@ namespace InSimDotNet
     public partial class InSimClient : IDisposable
     {
         /// <summary>
+        /// player handicaps
+        /// </summary>
+        public event EventHandler<PacketEventArgs<IS_PLH>> IS_PLH;
+
+        /// <summary>
         /// version info
         /// </summary>
         public event EventHandler<PacketEventArgs<IS_VER>> IS_VER;
@@ -275,6 +280,9 @@ namespace InSimDotNet
             var packetType = GetPacketType(packet);
             switch(packetType)
             {
+                case PacketType.ISP_PLH:
+                    OnIS_PLH(new PacketEventArgs<IS_PLH>(new IS_PLH(packet)));
+                    break;
                 case PacketType.ISP_VER:
                     OnIS_VER(new PacketEventArgs<IS_VER>(new IS_VER(packet)));
                     break;
@@ -426,6 +434,11 @@ namespace InSimDotNet
                     OnIS_MAL(new PacketEventArgs<IS_MAL>(new IS_MAL(packet)));
                     break;
             }
+        }
+
+        protected virtual void OnIS_PLH(PacketEventArgs<IS_PLH> e)
+        {
+            IS_PLH?.Invoke(this, e);
         }
 
         protected virtual void OnIS_VER(PacketEventArgs<IS_VER> e)
