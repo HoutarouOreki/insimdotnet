@@ -431,6 +431,7 @@ namespace InSimDotNet
         {
             if (!IsConnected)
             {
+                // remember to check where the threads are stopped at, if they are!
                 throw new InSimException("InSim is not connected");
             }
         }
